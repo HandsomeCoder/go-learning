@@ -7,7 +7,7 @@ import (
 )
 
 /*
-* In this case we can predent the value of result because of the race condition
+* In this case we can't predict the value of result because of the race condition
 * If condition was handle properly the everytime result value will be 400
  */
 func main() {
