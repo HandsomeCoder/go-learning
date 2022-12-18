@@ -2,29 +2,26 @@ package main
 
 import (
 	"fmt"
-	"sync"
 	"time"
 )
 
 /*
 * In this case we can't predict the value of result because of the race condition
-* If condition was handle properly the everytime result value will be 400
+* If condition was handle properly the everytime result value will be 10
  */
+func inc(x *int) {
+	time.Sleep(10 * time.Millisecond)
+	*x++
+}
+
 func main() {
 	result := 0
-	var wg sync.WaitGroup
+	fmt.Println("Initial value of the result variable: ", result)
 
-	for i := 0; i < 2; i++ {
-		wg.Add(1)
-		go func() {
-			for j := 0; j < 200; j++ {
-				result++
-				time.Sleep(2 * time.Millisecond)
-			}
-			wg.Done()
-		}()
+	for i := 0; i < 10; i++ {
+		go inc(&result)
 	}
-	wg.Wait()
 
-	fmt.Println("Finally a becomes:", result)
+	time.Sleep(time.Second)
+	fmt.Println("Finally value of the result variable: ", result)
 }
